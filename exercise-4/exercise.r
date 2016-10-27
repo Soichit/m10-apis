@@ -15,10 +15,12 @@ movie.no.spaces <- gsub(" ", "+", movie)
 # to pass to the API. View the OMDb documentation to see which parameters
 # are available. Remember to separate parameters with the '&' character.
 parameters <- paste0('t=', movie.no.spaces, '&', 'r=json')
+
 # Make a variable called request that is a string of a request URL made up of the base URL
 # and the parameters string
 request <- paste0(base.url, parameters)
 print(request)
+
 # Use fromJSON to retrieve JSON data from the omdb api using your request URL.
 # Store the result in a variable called movie.data
 movie.data <- fromJSON(request) 
@@ -44,7 +46,7 @@ paste(movie.director)
 # Knowing the director of on movie is okay, but it'd be great to know the directors of different
 # movies. 
 
-# Start by making a vecotr of movies and save it to the variable movie.list
+# Start by making a vector of movies and save it to the variable movie.list
 
 # Remove spaces from each movie title
 
