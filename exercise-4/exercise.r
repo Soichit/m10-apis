@@ -1,4 +1,6 @@
 # Install and load the jsonlite package
+library(jsonlite)
+library(dplyr)
 
 # Make a variable base.url that has the same base url from the omdb documentation.
 # (Hint: visit https://www.omdbapi.com/ to find the base url)
@@ -47,26 +49,40 @@ paste(movie.director)
 # movies. 
 
 # Start by making a vector of movies and save it to the variable movie.list
+movie.list <- c("Inside Out", "Up", "Tangled", "The Matrix")
 
 # Remove spaces from each movie title
+list.no.spaces <- gsub(" ", "+", movie.list)
+paste(list.no.spaces)
 
 # Prepare this list to be passed in as parameters for the API
+list.parameters <- paste0('t=', list.no.spaces, '&', 'r=json')
+paste(list.parameters)
 
 # Create API URL request and assign it to the variable api.request
+api.request <- paste0(base.url, list.parameters)
+print(api.request)
 
 # For every entry in the vector api.request, APPLY the function fromJSON to make a list of lists
 # one entry for each request and assign this to a variable called data. 
-# (Hint: ?lapply. It's similar a 'for' loop but better!)
+# (Hint: ?lapply. It's similar to a 'for' loop but better!)
+data <- lapply(api.request, fromJSON)
 
 # Using the function do.call, call rbind on each entry in data (check out the do.call documentation)
+data.list <- do.call(rbind, data)
 
 # Make sure movies is treated as a data frame by calling as.data.frame and assign that to movies.df
+movies.list.df <- as.data.frame(data.list)
+View(movies.list.df)
 
 # Use your Director function to see who directed all these movies. Assign the result to movie.info
-
+movie.info <- Director(movies.list.df)
+print(movie.info)
 # Create a variable called meta.scores which is a vector containing the Metascore column from movie.df
+meta.scores <- movies.list.df$Metascore
 
-# Create a variable called movie_titles which is a vector containing the Title column from movie.df
+# Create a variable called movie.titles which is a vector containing the Title column from movie.df
+movie.titles <- movies.list.df$Title
 
 # Once you finish the rest of the lab you can uncomment this next line for some sweet data viz
-#barplot(as.numeric(meta.scores), names.arg=as.vector(movie.titles), las=2)
+barplot(as.numeric(meta.scores), names.arg=as.vector(movie.titles), las=2)
